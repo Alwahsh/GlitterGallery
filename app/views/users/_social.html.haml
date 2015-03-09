@@ -5,13 +5,9 @@
         %p Follow
         %p= @user.username
     - elsif current_user.follow? @user
-      %a{href: "/#{@user.username}/unfollow", "data-remote" => true}
-        %p Unfollow
-        %p= @user.username
+      =link_to "<p>Unfollow</p> <p>#{html_escape_once(@user.username)}</p>".html_safe, unfollow_user_path(@user), method: :delete, remote: true
     -else
-      %a{href: "/#{@user.username}/follow", "data-remote" => true}
-        %p Follow
-        %p= @user.username
+      =link_to "<p>Follow</p> <p>#{html_escape_once(@user.username)}</p>".html_safe, follow_user_path(@user), method: :post, remote: true
 
   %div
     %a{href: "#"} 
