@@ -4,7 +4,6 @@ Glitter::Application.routes.draw do
   devise_scope :user do
     root to: "devise/sessions#new"
   end
-
   match 'auth/:provider/callback' => "identities#create", :via => [:get,:post]
   match 'auth/failure' => "identities#failed_to_authenticate", :via => [:get,:post]
   
@@ -19,6 +18,9 @@ Glitter::Application.routes.draw do
   post 'glitterposts/:id/edit' => 'glitterposts#update'
   get '/inspire' => 'projects#index'
   get '/dashboard' => 'dashboard#index', :as => :dashboard
+  get '/:username/follow' => 'relationships#follow'
+  get '/:username/unfollow' => 'relationships#unfollow'
+  get '/:username' => 'users#show'
   get '/:username/projects' => 'projects#user_show'
   get '/:username/projects/following' => 'users#list_followed_projects', :as => :followed_projects
   get '/:username/:project' => 'projects#show'
@@ -44,9 +46,9 @@ Glitter::Application.routes.draw do
   get '/:username/:project/pull/:pull_id/open' => 'projects#open'
   get '/:username/:project/pulls' => 'projects#pulls'
   get '/:username/:project/settings' => 'projects#settings'
+  get '/:username/:project/network' => 'projects#network'
   get '/:username/:project/issues/new' => 'issues#new'
   get '/:username/:project/issues' => 'issues#index'
-  get '/:username/:project/network' => 'projects#network'
   post '/:username/:project/issues/new' => 'issues#create'
   get '/:username/:project/issue/:sub_id' => 'issues#show'
   post '/:username/:project/issue/:sub_id/close' => 'issues#close'
@@ -77,22 +79,16 @@ Glitter::Application.routes.draw do
   post '/:username/:project/:xid/issues/new' => 'issues#create'
   post '/:username/:project/:xid/issue/:id/close' => 'issues#close'
 
-  resources :users, only: [:show], path: '/' do
+  
+  resources :projects do
     member do
-      post 'follow' => 'relationships#follow'
-      delete 'unfollow' => 'relationships#unfollow'
-      resources :projects, except: [:index], path: '/' do
-        member do
-          get 'projects/:id/invite.xml' => 'projects#invite'
-          post :file_upload
-          post :file_update
-          post :handle_pull_request
-          post :create_svg, :as => :create_svg
-          post :edit_svg, :as => :edit_svg
-          post :update_svg, :as => :update_svg
-        end
-      end
+      get 'projects/:id/invite.xml' => 'projects#invite'
+      post :file_upload
+      post :file_update
+      post :handle_pull_request
+      post :create_svg, :as => :create_svg
+      post :edit_svg, :as => :edit_svg
+      post :update_svg, :as => :update_svg
     end
-  end
-
+  end 
 end
