@@ -35,6 +35,7 @@ class User < ActiveRecord::Base
     "#{self.username}"
   end
 
+
   # This is a method within devise - we're overwriting it by saying that
   # we will require a password only if
   # A ) There are no linked identities

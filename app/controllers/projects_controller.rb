@@ -161,6 +161,11 @@ class ProjectsController < ApplicationController
   #       status (files added/removed in each commit)
   #       full (list all files in that commit as they list)
 
+  # GET /username/project/network
+  def network
+    @root = @project.root
+  end
+
   def commits
     @commits = []
     tree = "master" || params[:tree]
@@ -308,7 +313,7 @@ class ProjectsController < ApplicationController
     child = Project.new name: @project.name,
                         user_id: current_user.id,
                         uniqueurl: @project.uniqueurl,
-                        parent: @project.parent
+                        parent: @project
     if @project.private
       child.private = true
       child.uniqueurl = SecureRandom.hex
@@ -319,7 +324,7 @@ class ProjectsController < ApplicationController
       # todo - notifications
     else
       flash[:alert] = "Couldn't fork project, try again."
-      redirect_to @project
+      redirect_to @project.urlbase
     end
 
 

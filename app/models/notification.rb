@@ -17,7 +17,7 @@ class Notification < ActiveRecord::Base
 			NotifMailer.notif_email(self,victim).deliver
 		end
 	end
-  handle_asynchronously :send_emails
+  	handle_asynchronously :send_emails
 
 	def messageverb
 		if action == 0 or action == 5

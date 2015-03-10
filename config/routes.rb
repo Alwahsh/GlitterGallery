@@ -46,6 +46,7 @@ Glitter::Application.routes.draw do
   get '/:username/:project/settings' => 'projects#settings'
   get '/:username/:project/issues/new' => 'issues#new'
   get '/:username/:project/issues' => 'issues#index'
+  get '/:username/:project/network' => 'projects#network'
   post '/:username/:project/issues/new' => 'issues#create'
   get '/:username/:project/issue/:sub_id' => 'issues#show'
   post '/:username/:project/issue/:sub_id/close' => 'issues#close'
